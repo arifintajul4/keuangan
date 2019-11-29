@@ -22,7 +22,7 @@
             </a>
         </li>
         <li class=<?php echo ($title == "Identitas Sekolah") ? 'active':''; ?>>
-            <a href="<?= base_url().$this->uri->segment(1)?>/identitaswebsite">
+            <a href="<?= base_url('administrator')?>/identitaswebsite">
                 <i class='material-icons'>memory</i>
                     <span>Identitas Sekolah</span>
             </a>
@@ -47,23 +47,23 @@
             </a>
             <ul class="ml-menu">
                 <li>
-                    <a href="<?= base_url().$this->uri->segment(1)?>/manajemensiswa"><i class='material-icons'>chevron_right</i> Data Siswa</a>
+                    <a href="<?= base_url('administrator')?>/manajemensiswa"><i class='material-icons'>chevron_right</i> Data Siswa</a>
                 </li>
                 <li>
-                    <a href="<?= base_url().$this->uri->segment(1)?>/tabungan"><i class='material-icons'>chevron_right</i> Tabungan</a>
+                    <a href="<?= base_url('administrator')?>/tabungan"><i class='material-icons'>chevron_right</i> Tabungan</a>
                 </li>
             </ul>
         </li>
         
         <li class=<?php echo ($title == "Kelola Pembayaran") ? 'active':''; ?> >
-            <a href="<?= base_url().$this->uri->segment(1)?>/manajemenkeuangan">
+            <a href="<?= base_url('administrator')?>/manajemenkeuangan">
                 <i class="material-icons">attach_money</i>
                 <span>Pembayaran</span>
             </a>
         </li>
 
         <li class=<?php echo ($title == "Laporan Keuangan") ? 'active':''; ?> >
-            <a href="<?= base_url().$this->uri->segment(1)?>/laporan">
+            <a href="<?= base_url('laporan')?>">
                 <i class="material-icons">assignment</i>
                 <span>Laporan</span>
             </a>

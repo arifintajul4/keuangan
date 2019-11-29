@@ -3,7 +3,7 @@
       <div class="card">
           <div class="header">
               <h2>
-                  LAPORAN KEUANGAN
+                  LAPORAN PEMBAYARAN
               </h2>
           </div>
           <div class="body">

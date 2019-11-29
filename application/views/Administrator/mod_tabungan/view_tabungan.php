@@ -8,8 +8,8 @@
           </h2>
           <ul class="header-dropdown m-r--5">
             <li class="dropdown">
-              <a style="margin-right: 5px;" class='btn btn-primary btn-sm' href='<?= base_url().$this->uri->segment(1); ?>/tambah_tabungan'>Tambah Data</a>
-              <a class='btn btn-warning btn-sm' href=#>Cetak Laporan Harian</a>
+              <a style="margin-right: 5px;" class='btn btn-primary btn-sm' href='<?= base_url('administrator')?>/tambah_tabungan'>Tambah Data</a>
+              <a class='btn btn-warning btn-sm' href="<?= base_url('laporan/harian') ?>" target="_blank">Cetak Laporan Harian</a>
             </li>
           </ul>
       </div>

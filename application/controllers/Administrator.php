@@ -239,15 +239,15 @@ class Administrator extends CI_Controller {
         }
     }
 
-    function delete_tabungan(){
+    function delete_tabungan($id){
         $this->cek_admin();
-        $this->Model_app->delete('tabungan',$id);
         $this->session->set_flashdata('message',
-            '<div class="alert alert-danger alert-dismissible" role="alert">Berhasil Hapus Data!
+            '<div class="alert alert-success alert-dismissible" role="alert">Berhasil Hapus Data!
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>');
+        $this->Model_app->delete('tabungan', ['id' => $id]);
         redirect($this->uri->segment(1).'/tabungan');
     }
 
@@ -308,6 +308,12 @@ class Administrator extends CI_Controller {
                 echo json_encode($arr_result); 
             }
         }
+    }
+
+    // controller Laporan
+    
+    function laporanharian(){
+
     }
 
      // Controller Modul Keuangan
@@ -472,31 +478,6 @@ class Administrator extends CI_Controller {
         }
         
         redirect($this->uri->segment(1).'/spp');
-    }
-
-    // Controller Modul Laporan
-
-    function laporan(){
-        $this->cek_admin();
-        $data['title'] = 'Laporan Keuangan';
-        $this->template->load('administrator/template','administrator/mod_laporan/view_laporan', $data);
-    }
-
-
-
-    function tampil_data(){
-        $vtanggal=$this->input->post('vtanggal');
-        $data['tampil_data']=$this->Model_app->tampil_data($vtanggal);
-        $data['tampil_data1']=$this->Model_app->tampil_data1($vtanggal);
-        $this->load->view('administrator/mod_laporan/tampil_data',$data);
-    }
-
-    function cetak_laporan(){
-        $data['title'] = 'Cetak Laporan Keuangan';
-        $vtanggal=$this->input->post('vtanggal');
-        $data['tampil_data']=$this->Model_app->tampil_data($vtanggal);
-        $data['tampil_data1']=$this->Model_app->tampil_data1($vtanggal);
-        $this->load->view('administrator/mod_laporan/cetak_laporan',$data);
     }
 
     function cek_admin(){
