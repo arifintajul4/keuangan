@@ -28,7 +28,7 @@
             </a>
         </li>
 
-        <!-- <li class='' >
+        <li class=<?php echo ($title === "Kegiatan" or $title === "SPP" or $title === "PSB") ? 'active':''; ?> >
             <a href="javascript:void(0);" class="menu-toggle">
                 <i class="material-icons">attach_money</i>
                 <span>Tagihan</span>
@@ -38,7 +38,7 @@
                  <li><a href="#"><i class='material-icons'>chevron_right</i> Kegiatan Tahunan</a></li>
                  <li><a href="#"><i class='material-icons'>chevron_right</i> PSB</a></li>
             </ul>
-        </li> -->
+        </li>
 
         <li class=<?php echo ($title === "Data Siswa" or $title === "Data Tabungan") ? 'active':''; ?> >
             <a href="javascript:void(0);" class="menu-toggle">
