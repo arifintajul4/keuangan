@@ -45,7 +45,7 @@
           <div class='box-footer'>
             <div class="row-md-12">
               <button type='submit' name='submit' class='btn btn-info'>Submit</button>
-                <a href="<?= base_url().$this->uri->segment(1)?>/manajemenmodul">
+                <a href="<?= base_url().$this->uri->segment(1)?>/tabungan">
                   <button type='button' class='btn btn-default pull-right'>Cancel</button></a>
             </div>
           </div>

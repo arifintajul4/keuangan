@@ -17,7 +17,7 @@
 
 <div class="container animated fadeIn">
 	<div class="card card-container">
-		<img id="profile-img" class="profile-img-card" src="<?php echo base_url(); ?>assets/images/favicon.png">
+		<img id="profile-img" class="profile-img-card" src="<?= base_url('assets/images/').$identitas->favicon; ?>">
 		<p id="profile-name" class="judul">Login Administrator</p>
 		<hr>
 		<?php 

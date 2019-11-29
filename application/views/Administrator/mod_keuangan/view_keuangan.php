@@ -12,7 +12,7 @@
                   </li>
               </ul>
           </div>
-          <div class="body">
+          <div class="body table-responsive">
             <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
                   <thead>
                       <tr>

@@ -5,6 +5,7 @@ class Administrator extends CI_Controller {
 
 	function index(){
        if(null !== ($this->session->userdata('id_session'))) redirect('administrator/home');
+       $data['identitas'] = $this->Model_app->view('identitas')->row();
 		if (isset($_POST['submit'])){
 			$username = $this->input->post('username');
 			$password = sha1($this->input->post('password'));
@@ -16,116 +17,25 @@ class Administrator extends CI_Controller {
 				$this->session->set_userdata(array('username'=>$row['username'],
 								   'level'=>$row['level'],
                                    'id_session'=>$row['id_session']));
-
 				redirect($this->uri->segment(1).'/home');
 			}else{
 				$data['error'] = 'Username atau Password salah!';
-				$this->load->view('administrator/view_login',$data);
+				$this->load->view('administrator/view_login', $data);
 			}
 		}else{
-			$this->load->view('administrator/view_login');
+			$this->load->view('administrator/view_login', $data);
 		}
 	}
-
-	function reset_password(){
-        if (isset($_POST['submit'])){
-            $usr = $this->Model_app->edit('users', array('id_session' => $this->input->post('id_session')));
-            if ($usr->num_rows()>=1){
-                if ($this->input->post('a')==$this->input->post('b')){
-                    $data = array('password'=>sha1($this->input->post('a')));
-                    $where = array('id_session' => $this->input->post('id_session'));
-                    $this->Model_app->update('users', $data, $where);
-
-                    $row = $usr->row_array();
-                    $this->session->set_userdata('upload_image_file_manager',true);
-                    $this->session->set_userdata(array('username'=>$row['username'],
-                                       'level'=>$row['level'],
-                                       'id_session'=>$row['id_session']));
-                    redirect('administrator/home');
-                }else{
-                    $data['title'] = 'Password Tidak sama!';
-                    $this->load->view('administrator/view_reset',$data);
-                }
-            }else{
-                $data['title'] = 'Terjadi Kesalahan!';
-                $this->load->view('administrator/view_reset',$data);
-            }
-        }else{
-            $this->session->set_userdata(array('id_session'=>$this->uri->segment(3)));
-            $data['title'] = 'Reset Password';
-            $this->load->view('administrator/view_reset',$data);
-        }
-    }
-
-    function lupapassword(){
-        if (isset($_POST['lupa'])){
-            $email = strip_tags($this->input->post('email'));
-            $cekemail = $this->Model_app->edit('users', array('email' => $email))->num_rows();
-            if ($cekemail <= 0){
-                $data['title'] = 'Alamat email tidak ditemukan';
-                $this->load->view('administrator/view_login',$data);
-            }else{
-                $iden = $this->Model_app->edit('identitas', array('id_identitas' => 1))->row_array();
-                $usr = $this->Model_app->edit('users', array('email' => $email))->row_array();
-
-                $config = [
-                   'mailtype'  => 'html',
-                   'charset'   => 'utf-8',
-                   'protocol'  => 'mail',
-                   'smtp_host' => 'ssl://smtp.gmail.com',
-                   'smtp_user' => 'kelompok2tekan@gmail.com',    // Ganti dengan email gmail kamu
-                   'smtp_pass' => 'kelompok2imut',      // Password gmail kamu
-                   'smtp_port' => 465,
-                   'crlf'      => "\r\n",
-                ];
-                $this->load->library('email', $config);
-                $this->email->set_newline("\r\n");
-
-                $subject      = 'Lupa Password ...';
-                $message      = "<html><body>
-                                    <table style='margin-left:25px'>
-                                        <tr><td>Halo $usr[nama_lengkap],<br>
-                                        Seseorang baru saja meminta untuk mengatur ulang kata sandi Anda di <span style='color:red'>$iden[url]</span>.<br>
-                                        Klik di sini untuk mengganti kata sandi Anda.<br>
-                                        Atau Anda dapat copas (Copy Paste) url dibawah ini ke address Bar Browser anda :<br>
-                                        <a href='".base_url()."administrator/reset_password/$usr[id_session]'>".base_url()."administrator/reset_password/$usr[id_session]</a><br><br>
-
-                                        Tidak meminta penggantian ini?<br>
-                                        Jika Anda tidak meminta kata sandi baru, segera beri tahu kami.<br>
-                                        Email. $iden[email], No Telp. $iden[no_telp]</td></tr>
-                                    </table>
-                                </body></html> \n";
-                
-                $this->email->from('kelompok2tekan@gmail.com', 'tes');
-                $this->email->to('arifintajul4@gmail.com');
-                $this->email->subject($subject);
-                $this->email->message($message);
-                $this->email->send();
-
-                // Tampilkan pesan sukses atau error
-                if ($this->email->send()) {
-                    $data['error'] = 'Password terkirim ke '.$usr['email'];
-                } else {
-                    //$data['error'] = $this->email->print_debugger();
-                    $data['error'] = 'Gagal kirim email ke '.$usr['email'];
-                }
-                $this->load->view('administrator/view_login',$data);
-            }
-        }else{
-            $data['title'] = 'Reset Password Administrator';
-			$this->load->view('administrator/lupa_password',$data);
-        }
-    }
 
     function home(){
         $this->cek_admin();
     	$data['title'] = 'Dasboard Administrator';
         if ($this->session->level=='admin'){
-          $this->template->load('administrator/template','administrator/view_home',$data);
+            $this->template->load('administrator/template','administrator/view_home',$data);
         }else{
-          $data['users'] = $this->Model_app->view_where('users',array('username'=>$this->session->username))->row_array();
-          $data['modul'] = $this->Model_app->view_join_one('users','users_modul','id_session','id_umod','DESC');
-          $this->template->load('administrator/template','administrator/view_home',$data);
+            $data['users'] = $this->Model_app->view_where('users',array('username'=>$this->session->username))->row_array();
+            $data['modul'] = $this->Model_app->view_join_one('users','users_modul','id_session','id_umod','DESC');
+            $this->template->load('administrator/template','administrator/view_home',$data);
         }
     }
 
@@ -134,26 +44,35 @@ class Administrator extends CI_Controller {
 		if (isset($_POST['submit'])){
 			$config['upload_path'] = 'assets/images/';
             $config['allowed_types'] = 'gif|jpg|png|ico';
-            $config['max_size'] = '500'; // kb
+            $config['max_size'] = '1024'; // kb
+            $config['overwrite'] = true;
             $this->load->library('upload', $config);
-            $this->upload->do_upload('j');
-            $hasil=$this->upload->data();
-
+            $this->upload->do_upload('favicon');
+            $file1 = $this->upload->data();
+             echo "<pre>";
+             print_r($file1);
+             echo "</pre>";
+            $this->upload->do_upload('logo');
+             $file2 = $this->upload->data();
+             echo "<pre>";
+             print_r($file2);
+             echo "</pre>";
+            //var_dump($hasil2);
+            die;
             if ($hasil['file_name']==''){
-            	$data = array('nama_website'=>$this->db->escape_str($this->input->post('a')),
-                                'alamat'=>$this->db->escape_str($this->input->post('e')),
-                                'no_telp'=>$this->db->escape_str($this->input->post('f')),
+            	$data = array('nama_sekolah'=>$this->db->escape_str($this->input->post('nama_sekolah')),
+                                'alamat'=>$this->db->escape_str($this->input->post('alamat')),
+                                'no_telp'=>$this->db->escape_str($this->input->post('no_telp')),
                             );
             }else{
-            	$data = array('nama_website'=>$this->db->escape_str($this->input->post('a')),
-                                'alamat'=>$this->db->escape_str($this->input->post('e')),
-                                'no_telp'=>$this->db->escape_str($this->input->post('f')),
+            	$data = array('nama_sekolah'=>$this->db->escape_str($this->input->post('nama_sekolah')),
+                                'alamat'=>$this->db->escape_str($this->input->post('alamat')),
+                                'no_telp'=>$this->db->escape_str($this->input->post('favicon')),
                                 'favicon'=>$hasil['file_name']
                             );
             }
 	    	$where = array('id_identitas' => $this->input->post('id'));
 			$this->Model_app->update('identitas', $data, $where);
-
 			redirect($this->uri->segment(1).'/identitaswebsite');
 		}else{
 			$proses = $this->Model_app->edit('identitas', array('id_identitas' => 1))->row_array();
@@ -163,9 +82,8 @@ class Administrator extends CI_Controller {
 		}
 	}
 
-    // Controller Modul User
-
-    function manajemenuser(){
+    // Controller Modul Siswa
+    function manajemensiswa(){
         $data['title'] = 'Data Siswa';
         $data['record'] = $this->Model_app->view_ordering('siswa','nis','DESC');
         $this->template->load('administrator/template','administrator/mod_users/view_users',$data);
@@ -174,6 +92,7 @@ class Administrator extends CI_Controller {
     function detailsiswa($nis){
         $data['title'] = 'Data Siswa';
         $data['siswa'] = $this->Model_app->view_where('siswa', ['nis' => $nis])->row();
+        $data['record'] = $this->Model_app->view_where('transaksi_tabungan', ['nis' => $nis])->result_array();
         $this->template->load('administrator/template','administrator/mod_users/view_profil',$data);
     }
 
@@ -208,12 +127,12 @@ class Administrator extends CI_Controller {
         }
     }
 
-    function edit_manajemenuser(){
+    function edit_manajemenuser($nis){
         $this->cek_admin();
-        $data['title'] = 'Edit Data User';
-        $id = $this->uri->segment(3);
+        $data['title'] = 'Edit Data Siswa';
+        $id = $this->session->username;
         if (isset($_POST['submit'])){
-            $data = array('nis'=>$this->db->escape_str($this->input->post('nis')),
+            $data = array(
                             'nama'=>$this->db->escape_str($this->input->post('nama_siswa')),
                             'no_tlp'=>$this->db->escape_str($this->input->post('no_tlp_siswa')),
                             'tgl_lahir'=>$this->db->escape_str($this->input->post('tgl_lahir_siswa')),
@@ -222,114 +141,123 @@ class Administrator extends CI_Controller {
                             'kewarganegaraan'=>$this->db->escape_str($this->input->post('kewarganegaraan')),
                             'alamat'=>$this->db->escape_str($this->input->post('alamat_siswa'))
                         );
-            $where = array('nis' => $this->input->post('nis'));
-            $this->Model_app->update('siswa', $data, $where);
+        
+            $this->Model_app->update('siswa',$data, ['nis' => $nis]);
             $this->session->set_flashdata('message',
-            '<div class="alert alert-success alert-dismissible" role="alert">Berhasil Mengubah Data!
+            '<div class="alert alert-success alert-dismissible" role="alert">Berhasil Menambah Data!
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>');
-            redirect($this->uri->segment(1).'/manajemenuser/');
+
+            redirect($this->uri->segment(1).'/manajemensiswa/');
         }else{
-            $data['siswa'] = $this->Model_app->edit('siswa', array('nis' => $id))->row_array();;
+            $data['siswa'] = $this->Model_app->view_where('siswa', ['nis' => $nis])->row();
             $this->template->load('administrator/template','administrator/mod_users/view_users_edit',$data);
         }
     }
 
-    function delete_manajemenuser(){
+    function delete_manajemenuser($nis){
         $this->cek_admin();
-        $id = array('nis' => $this->uri->segment(3));
-        $this->Model_app->delete('siswa',$id);
+        $this->Model_app->delete('siswa',['nis' => $nis]);
         $this->session->set_flashdata('message',
             '<div class="alert alert-success alert-dismissible" role="alert">Berhasil Menghapus Data!
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>');
-        redirect($this->uri->segment(1).'/manajemenuser');
+        redirect($this->uri->segment(1).'/manajemensiswa');
     }
 
-    function delete_akses(){
-        $this->cek_admin();
-        $id = array('id_umod' => $this->uri->segment(3));
-        $this->Model_app->delete('users_modul',$id);
-        redirect($this->uri->segment(1).'/edit_manajemenuser/'.$this->uri->segment(4));
-    }
-
-    // Controller Modul Modul
-
-    function manajemenmodul(){
+    // Controller Modul Tabungan
+    function tabungan(){
         $this->cek_admin();
         $data['title'] = 'Data Tabungan';
         $data['record'] = $this->Model_app->view_join_one('siswa','tabungan','nis','siswa.nis','desc');
-        //var_dump($data['record']); die;
-        $this->template->load('administrator/template','administrator/mod_modul/view_modul',$data);
+        $this->template->load('administrator/template','administrator/mod_tabungan/view_tabungan',$data);
     }
 
-    function tambah_manajemenmodul(){
-        $this->cek_admin();
+    function tambah_tabungan(){
         $data['title'] = 'Tambah Tabungan';
         if (isset($_POST['submit'])){
             $data = [
-                        'nis'=>$this->db->escape_str($this->input->post('nis')),
-                        'jenis'=>$this->db->escape_str($this->input->post('jenis')),
-                        'nominal'=>$this->db->escape_str($this->input->post('nominal')),
-                        'ket'=>$this->db->escape_str($this->input->post('keterangan'))
-                    ];
-
-            if($this->input->post('jenis') == 'masuk'){
-
-            }else if($this->input->post('jenis') == 'keluar'){
-
-            }else{
-                $this->template->load('administrator/template','administrator/mod_modul/view_modul_tambah', $data);
-            }
-
+                'nis'=>$this->db->escape_str($this->input->post('nis')),
+                'jenis'=>$this->db->escape_str($this->input->post('jenis')),
+                'nominal'=>$this->db->escape_str($this->input->post('nominal')),
+                'ket'=>$this->db->escape_str($this->input->post('keterangan')),
+                'tanggal' =>$this->db->escape_str($this->input->post('tanggal'))
+            ];
+            $this->session->set_flashdata('message',
+            '<div class="alert alert-success alert-dismissible" role="alert">Berhasil Menambah Data!
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>');
             $this->Model_app->insert('transaksi_tabungan',$data);
-            redirect($this->uri->segment(1).'/manajemenmodul');
-        }else{
-            $this->template->load('administrator/template','administrator/mod_modul/view_modul_tambah', $data);
-        }
-    }
-
-    function edit_manajemenmodul(){
-        $this->cek_admin();
-        $data['title'] = 'Edit Modul';
-        if (isset($_POST['submit'])){
-            $data = array('nama_modul'=>$this->db->escape_str($this->input->post('a')),
-                        'username'=>$this->session->username,
-                        'link'=>$this->db->escape_str($this->input->post('b')),
-                        'static_content'=>'',
-                        'gambar'=>'',
-                        'publish'=>$this->db->escape_str($this->input->post('c')),
-                        'status'=>$this->db->escape_str($this->input->post('e')),
-                        'aktif'=>$this->db->escape_str($this->input->post('d')),
-                        'urutan'=>'0',
-                        'link_seo'=>'');
-            $where = array('id_modul' => $this->input->post('id'));
-            $this->Model_app->update('modul', $data, $where);
-            redirect($this->uri->segment(1).'/manajemenmodul');
-        }else{
-            if ($this->session->level=='admin'){
-                 $proses = $this->Model_app->edit('modul', array('id_modul' => $id))->row_array();
+            $tabungan1['siswa'] = $this->Model_app->view_where('tabungan', ['nis' => $this->input->post('nis')])->row();
+            $tabungan['nis'] = $this->input->post('nis');
+            if(isset($tabungan1['siswa'])){
+                if($this->input->post('jenis') == 'masuk'){
+                    $nominal = $this->input->post('nominal');
+                    $saldo = $tabungan1['siswa']->saldo;
+                    $tabungan['saldo'] = (int)$nominal + (int)$saldo;
+                }else if($this->input->post('jenis') == 'keluar'){
+                    $nominal = $this->input->post('nominal');
+                    $saldo = $tabungan1['siswa']->saldo;
+                    $tabungan['saldo'] = (int)$saldo - (int)$nominal;
+                }else{
+                    $this->session->set_flashdata('message',
+                    '<div class="alert alert-danger alert-dismissible" role="alert">Gagal Menambah Data!
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>');
+                }
+                $this->Model_app->update('tabungan', $tabungan, ['nis' => $this->input->post('nis')]);
             }else{
-                $proses = $this->Model_app->edit('modul', array('id_modul' => $id, 'username' => $this->session->username))->row_array();
+                if($this->input->post('jenis') == 'masuk'){
+                    $tabungan['saldo'] = $this->input->post('nominal');
+                    $this->Model_app->insert('tabungan', $tabungan);
+                    $this->session->set_flashdata('message',
+                    '<div class="alert alert-success alert-dismissible" role="alert">Berhasil Menambah Data!
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>');
+                }else{
+                    $this->session->set_flashdata('message',
+                    '<div class="alert alert-danger alert-dismissible" role="alert">Gagal Menambah Data!
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>');
+                }
             }
-            $data = array('rows' => $proses);
-            $this->template->load('administrator/template','administrator/mod_modul/view_modul_edit',$data);
+            redirect($this->uri->segment(1).'/tabungan');
+        }else{
+            $this->template->load('administrator/template','administrator/mod_tabungan/view_tabungan_tambah', $data);
         }
     }
 
-    function delete_manajemenmodul(){
+    function delete_tabungan(){
         $this->cek_admin();
-        if ($this->session->level=='admin'){
-            $id = array('id_modul' => $this->uri->segment(3));
-        }else{
-            $id = array('id_modul' => $this->uri->segment(3), 'username'=>$this->session->username);
-        }
-        $this->Model_app->delete('modul',$id);
-        redirect($this->uri->segment(1).'/manajemenmodul');
+        $this->Model_app->delete('tabungan',$id);
+        redirect($this->uri->segment(1).'/tabungan');
+    }
+
+    // Transaksi Tabungan
+    function delete_trxtabungan($id, $nis)
+    {
+        $this->cek_admin();
+        $this->Model_app->delete('transaksi_tabungan', ['no_transaksi' => $id]);
+        redirect($this->uri->segment(1).'/detailsiswa/'.$nis);   
+    }
+
+    function edit_trxtabungan($id){
+        $this->cek_admin();
+        $data['title'] = 'Edit Tabungan';
+        $data['transaksi'] = $this->Model_app->view_where('transaksi_tabungan', ['no_transaksi' => $id])->row();
+        $this->template->load('administrator/template','administrator/mod_tabungan/view_tabungan_edit',$data);
     }
 
     function get_datasiswa(){

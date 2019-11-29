@@ -47,10 +47,10 @@
             </a>
             <ul class="ml-menu">
                 <li>
-                    <a href="<?= base_url().$this->uri->segment(1)?>/manajemenuser"><i class='material-icons'>chevron_right</i> Data Siswa</a>
+                    <a href="<?= base_url().$this->uri->segment(1)?>/manajemensiswa"><i class='material-icons'>chevron_right</i> Data Siswa</a>
                 </li>
                 <li>
-                    <a href="<?= base_url().$this->uri->segment(1)?>/manajemenmodul"><i class='material-icons'>chevron_right</i> Tabungan</a>
+                    <a href="<?= base_url().$this->uri->segment(1)?>/tabungan"><i class='material-icons'>chevron_right</i> Tabungan</a>
                 </li>
             </ul>
         </li>
@@ -80,10 +80,11 @@
     </ul>
 </div>
 <!-- #Menu -->
+
 <!-- Footer -->
 <div class="legal">
     <div class="copyright">
         <strong>&copy; <?php echo date('Y'); ?> All rights reserved.</strong> 
     </div>
-</div><strong>Copyright &copy; <?php echo date('Y'); ?> </strong> All rights reserved. 
+</div><
 <!-- #Footer -->

@@ -50,12 +50,12 @@
                 <i class="material-icons">account_balance_wallet</i>
             </div>
             <div class="content">
-                <div class="text">SALDO SEKARANG</div>
+                <div class="text">TABUNGAN SISWA</div>
                 <?php
-                    $query = $this->db->query("SELECT ROUND ( SUM(IF(status = 'Masuk', jumlah, 0))-(SUM(IF( status = 'Keluar', jumlah, 0))) ) AS subtotal FROM keuangan");
+                    $query = $this->db->query("SELECT SUM(saldo) AS total FROM tabungan");
 
                     foreach ($query->result_array() as $rows) {
-                      $dwet = $rows['subtotal'];
+                      $dwet = $rows['total'];
                       $arto = number_format($dwet,0,",",".");
                        echo "<div class='number'><b>Rp. $arto</b></div>";
                      } 

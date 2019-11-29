@@ -11,9 +11,8 @@
         <?php 
           $attributes = array('class'=>'form-horizontal','role'=>'form');
           echo form_open_multipart($this->uri->segment(1).'/tambah_manajemenuser',$attributes);  ?>
-          <div class='col-md-12'>
-              <h4>Data Siswa</h4> 
-              <div class="col-md-12">
+          <div class='row-md-12'>
+              <div class="row-md-12">
                 <div class="row row-md-12">
                   <div class="col col-md-3">Nomor Induk Siswa</div>
                   <div class="col col-md-9"><input type="text" name="nis" id="nis" class="form-control"></div>
@@ -66,7 +65,7 @@
               <div class='box-footer'>
                 <div class="row-md-12">
                 <button type='submit' name='submit' class='btn btn-info'>Tambahkan</button>
-                  <a href="<?= base_url().$this->uri->segment(1)?>/manajemenuser">
+                  <a href="<?= base_url().$this->uri->segment(1)?>/manajemensiswa">
                     <button type='button' class='btn btn-default pull-right'>Cancel</button></a>
                 </div>
               </div>

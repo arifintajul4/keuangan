@@ -22,7 +22,7 @@
                                 <p><strong>Nama Sekolah</strong></p>
                             </div>
                             <div class="col-md-10">
-                                <input type='text' class='form-control' name='a' value='<?= $record['nama_website'] ?>'>
+                                <input type='text' class='form-control' name='nama_sekolah' value='<?= $record['nama_sekolah'] ?>'>
                             </div>
                         </div>
                         <div class="row-md-12">
@@ -30,7 +30,7 @@
                                 <p><strong>No Telepon</strong></p>
                             </div>
                             <div class="col-md-10">
-                                <input type='number' class='form-control' name='f' value='<?= $record['no_telp'] ?>'>
+                                <input type='number' class='form-control' name='no_telp' value='<?= $record['no_telp'] ?>'>
                             </div>
                         </div>
                         <div class="row-md-12">
@@ -38,7 +38,7 @@
                                 <p><strong>Alamat</strong></p>
                             </div>
                             <div class="col-md-10">
-                                <textarea class='form-control' name='e' style='height:80px'><?= $record['alamat'] ?></textarea>
+                                <textarea class='form-control' name='alamat' style='height:80px'><?= $record['alamat'] ?></textarea>
                             </div>
                         </div>
                         <div class="row-md-12">
@@ -46,7 +46,7 @@
                                 <p><strong>Logo Sekolah</strong></p>
                             </div>
                             <div class="col-md-10">
-                                <input type='file' class='form-control' name='j' value='<?= $record['favicon'] ?>'>
+                                <input type='file' class='form-control' name='logo' value='<?= $record['favicon'] ?>'>
                             </div>
                         </div>
                         <div class="row-md-12">
@@ -54,7 +54,7 @@
                                 <p><strong>Favicon</strong></p>
                             </div>
                             <div class="col-md-10">
-                                <input type='file' class='form-control' name='j' value='<?= $record['favicon'] ?>'>
+                                <input type='file' class='form-control' name='favicon' value='<?= $record['favicon'] ?>'>
                                 <hr style='margin:5px'>Favicon Aktif Saat ini : <img style='width:32px; height:32px' src="<?= base_url('assets/images/'.$record["favicon"]) ?>">
                             </div>
                         </div>
