@@ -242,6 +242,12 @@ class Administrator extends CI_Controller {
     function delete_tabungan(){
         $this->cek_admin();
         $this->Model_app->delete('tabungan',$id);
+        $this->session->set_flashdata('message',
+            '<div class="alert alert-danger alert-dismissible" role="alert">Berhasil Hapus Data!
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>');
         redirect($this->uri->segment(1).'/tabungan');
     }
 
@@ -250,6 +256,12 @@ class Administrator extends CI_Controller {
     {
         $this->cek_admin();
         $this->Model_app->delete('transaksi_tabungan', ['no_transaksi' => $id]);
+        $this->session->set_flashdata('message',
+            '<div class="alert alert-success alert-dismissible" role="alert">Berhasil Hapus Data!
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>');
         redirect($this->uri->segment(1).'/detailsiswa/'.$nis);   
     }
 
