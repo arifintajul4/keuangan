@@ -256,8 +256,27 @@ class Administrator extends CI_Controller {
     function edit_trxtabungan($id){
         $this->cek_admin();
         $data['title'] = 'Edit Tabungan';
-        $data['transaksi'] = $this->Model_app->view_where('transaksi_tabungan', ['no_transaksi' => $id])->row();
-        $this->template->load('administrator/template','administrator/mod_tabungan/view_tabungan_edit',$data);
+        if(isset($_POST['submit'])){
+            $data = [
+                'jenis'=>$this->db->escape_str($this->input->post('jenis')),
+                'nominal'=>$this->db->escape_str($this->input->post('nominal')),
+                'ket'=>$this->db->escape_str($this->input->post('keterangan')),
+                'tanggal' =>$this->db->escape_str($this->input->post('tanggal'))
+            ];
+            $this->session->set_flashdata('message',
+            '<div class="alert alert-success alert-dismissible" role="alert">Berhasil Mengubah Data!
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>');
+            $nis = $this->db->escape_str($this->input->post('nis'));
+            $this->Model_app->update('transaksi_tabungan', $data, ['no_transaksi' => $id]);
+            redirect($this->uri->segment(1).'/detailsiswa/'.$nis);
+        }else{
+            $data['siswa'] = $this->Model_app->view_where('siswa', ['nis' => $nis])->row();
+            $data['transaksi'] = $this->Model_app->view_where('transaksi_tabungan', ['no_transaksi' => $id])->row();
+            $this->template->load('administrator/template','administrator/mod_tabungan/view_tabungan_edit',$data);
+        }
     }
 
     function get_datasiswa(){
